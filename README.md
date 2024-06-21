@@ -44,3 +44,30 @@ This guide provides step-by-step instructions for deploying a smart contract on 
    ```
 
 - This command should display a list of accounts along with their addresses and public keys. Ensure that your intended account is correctly listed.
+
+## Step 4: Write and Compile Your Smart Contract
+
+1. Write the Contract: Create a new Move module in your project directory. For example, create a file named MyModule.move with the following content:
+   ```move
+   module MyModule {
+       public fun say_hello(account: &signer) {
+           // Your contract logic here
+       }
+   }
+   ```
+2. Compile the Contract: Use the Aptos CLI to compile your Move module.
+   ```sh
+   aptos move compile --named-addresses MyModule=default
+   ```
+
+- This command will compile the contract and generate the necessary bytecode
+
+## Step 5: Deploy the Contract
+
+1. Deploy the Contract: Use the Aptos CLI to deploy the compiled contract to the network.
+
+   ```sh
+   aptos move publish --package-dir <path_to_your_package> --named-addresses MyModule=default
+   ```
+
+- Replace <path_to_your_package> with the path to your Move package directory. This command will deploy the contract to the network and output the transaction details.

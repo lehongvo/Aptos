@@ -70,4 +70,10 @@ This guide provides step-by-step instructions for deploying a smart contract on 
    aptos move publish --package-dir <path_to_your_package> --named-addresses MyModule=default
    ```
 
+   or
+
+   ```
+   aptos move publish
+   ```
+
 - Replace <path_to_your_package> with the path to your Move package directory. This command will deploy the contract to the network and output the transaction details.

@@ -4,8 +4,8 @@ version = "1.0.0"
 authors = []
 
 [addresses]
-my_addrx = "0x42"
-std = "0x1"
+coin_address="0x42"
+user_address="0x41"
 
 [dev-addresses]
 

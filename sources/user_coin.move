@@ -43,8 +43,13 @@ module coin_address::token_erc20 {
         move_to(coin_admin, caps);
     }
 
-    public entry fun register(userAddress: signer) {
-        coin::register<UserCoin>(&userAddress);
+    public entry fun register(userAddress: &signer) {
+        coin::register<UserCoin>(userAddress);
+    }
+    
+    #[view]
+    public fun is_account_registered(addr: address): bool {
+        coin::is_account_registered<UserCoin>(addr)
     }
 
     public entry fun mint(

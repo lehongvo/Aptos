@@ -15,11 +15,16 @@ This guide provides step-by-step instructions for deploying a smart contract on 
 
 ## Step 2: Set Up Configuration for Deployment
 
-1. **Install Aptos CLI**: If you haven't installed the Aptos CLI, you can do so by following the instructions from the official Aptos CLI GitHub repository. On other platforms, download the appropriate binary from the GitHub releases page and add it to your PATH.
+1. **Install Aptos CLI**: If you haven't installed the Aptos CLI, you can do so by following the instructions from the official Aptos CLI GitHub repository
+
    For example, on macOS you can use Homebrew:
+
    ```sh
    brew install aptos
    ```
+
+- On other platforms, download the appropriate binary from the GitHub releases page and add it to your PATH.
+
 2. **Initialize Aptos Configuration**: In your project directory, run the following command to set up the configuration for your Aptos account.
    ```sh
    aptos init

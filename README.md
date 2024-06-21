@@ -70,7 +70,7 @@ This guide provides step-by-step instructions for deploying a smart contract on 
    aptos move publish --package-dir <path_to_your_package> --named-addresses MyModule=default
    ```
 
-   or
+   if you already config environment deploy, please run with sh
 
    ```
    aptos move publish

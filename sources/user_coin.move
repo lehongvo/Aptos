@@ -1,4 +1,4 @@
-module coin_address::user_coin {
+module coin_address::token_erc20 {
     use std::signer;
     use std::string::utf8;
 

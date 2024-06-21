@@ -3,7 +3,7 @@ module coin_address::user_coin_tests {
     use aptos_framework::account;
     use aptos_framework::coin;
 
-    use coin_address::user_coin::{Self, UserCoin};
+    use coin_address::token_erc20::{Self, UserCoin};
 
     const AMOUNT_TO_MINT: u64 = 100_000_000;
     const WRONG_BALANCE_MINT: u64 = 2;
@@ -11,7 +11,7 @@ module coin_address::user_coin_tests {
 
     #[test(coin_admin = @coin_address)]
     fun test_mint_burn_coins(coin_admin: signer) {
-        user_coin::initialize(&coin_admin);
+        token_erc20::initialize(&coin_admin);
 
         let user_addr = @0x41;
 
@@ -19,7 +19,7 @@ module coin_address::user_coin_tests {
 
         coin::register<UserCoin>(&user);
 
-        user_coin::mint(
+        token_erc20::mint(
             &coin_admin,
             user_addr,
             AMOUNT_TO_MINT
@@ -30,7 +30,7 @@ module coin_address::user_coin_tests {
             WRONG_BALANCE_MINT
         );
 
-        user_coin::burn(&user, AMOUNT_TO_MINT);
+        token_erc20::burn(&user, AMOUNT_TO_MINT);
         let balance_of_user_after = coin::balance<UserCoin>(user_addr);
         assert!(
             balance_of_user_after == 0,

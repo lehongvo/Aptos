@@ -40,11 +40,16 @@ const initializeCoin = async () => {
 
         const aptos = getAptos();
 
+        let whileList = [
+            process.env.PRIVATE_KEY_DEPLOY_USER1,
+            process.env.PRIVATE_KEY_DEPLOY_USER2
+        ];
+
         const rawTx = await aptos.transaction.build.simple({
             sender: account.accountAddress,
             data: {
-                function: `${account.accountAddress}::token::initialize`,
-                functionArguments: [],
+                function: `${account.accountAddress}::titan_power::initialize`,
+                functionArguments: [whileList],
             }
         });
 
@@ -63,7 +68,7 @@ const initializeCoin = async () => {
 const isAccountRegistered = async (contractAddress, checkAtAccount, aptos) => {
     try {
         const payload = {
-            function: `${contractAddress}::token::is_account_registered`,
+            function: `${contractAddress}::titan_power::is_account_registered`,
             functionArguments: [checkAtAccount]
         };
         const result = await aptos.view({ payload });
@@ -76,8 +81,8 @@ const isAccountRegistered = async (contractAddress, checkAtAccount, aptos) => {
 const register = async () => {
     try {
         const account = Account.fromPrivateKey({
-            privateKey: new Ed25519PrivateKey(process.env.PRIVATE_KEY_DEPLOY_USER),
-            address: AccountAddress.from(process.env.PUBLIC_KEY_DEPLOY_USER)
+            privateKey: new Ed25519PrivateKey(process.env.PRIVATE_KEY_DEPLOY),
+            address: AccountAddress.from(process.env.PUBLIC_KEY_DEPLOY)
         });;
 
         const contractAddress = AccountAddress.from(process.env.PUBLIC_KEY_DEPLOY);
@@ -90,7 +95,7 @@ const register = async () => {
             const rawTx = await aptos.transaction.build.simple({
                 sender: account.accountAddress,
                 data: {
-                    function: `${(contractAddress).toString()}::token::register`,
+                    function: `${(contractAddress).toString()}::titan_power::register`,
                     functionArguments: [],
                 }
             });
@@ -114,14 +119,48 @@ const mint = async () => {
 
         const aptos = getAptos();
 
+        const payload = {
+            function: `${account.accountAddress}::titan_power::is_in_whitelist`,
+            functionArguments: [process.env.PUBLIC_KEY_DEPLOY_USER1]
+        }
+
+        const result = await aptos.view({ payload });
+        if (!result[0]) {
+            await update_while_list(process.env.PUBLIC_KEY_DEPLOY_USER1);
+        }
+
         const rawTx = await aptos.transaction.build.simple({
             sender: account.accountAddress,
             data: {
-                function: `${account.accountAddress}::token::mint`,
+                function: `${account.accountAddress}::titan_power::mint`,
                 functionArguments: [
-                    AccountAddress.from(process.env.PUBLIC_KEY_DEPLOY_USER),
+                    AccountAddress.from(process.env.PUBLIC_KEY_DEPLOY_USER1),
                     new U64(process.env.AMOUNT_TO_MINT)
                 ],
+            }
+        });
+
+        const pendingTxn = await aptos.signAndSubmitTransaction({
+            signer: account,
+            transaction: rawTx,
+        });
+        const response = await aptos.waitForTransaction({ transactionHash: pendingTxn.hash });
+        console.log("---------------Transaction hash:", response.hash);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const update_while_list = async (accountPuc) => {
+    try {
+        const account = getAccount();
+        const aptos = getAptos();
+
+        const rawTx = await aptos.transaction.build.simple({
+            sender: account.accountAddress,
+            data: {
+                function: `${account.accountAddress}::titan_power::update_whitelist`,
+                functionArguments: [accountPuc, true],
             }
         });
 
@@ -139,3 +178,4 @@ const mint = async () => {
 // initializeCoin();
 // register();
 // mint();
+// update_while_list()

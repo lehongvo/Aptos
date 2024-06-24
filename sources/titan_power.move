@@ -1,4 +1,4 @@
-module coin_address::token_erc20 {
+module coin_address::titan_power {
     use std::signer;
     use std::string::utf8;
     use std::vector;

@@ -1,5 +1,5 @@
 #[test_only]
-module coin_address::user_coin_tests {
+module coin_address::titan_power {
     use aptos_framework::account;
     use aptos_framework::coin;
     use std::debug::print;

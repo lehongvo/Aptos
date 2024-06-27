@@ -17,6 +17,31 @@ module hello_contract::message {
 
     const ENO_MESSAGE: u64 = 0;
 
+    struct DeployData has key, copy, drop {
+        addr: address,
+        age: u64,
+        name: string::String,
+    }
+
+    fun init_module(
+        address_signer: &signer, 
+    ) {
+        move_to(
+            address_signer,
+            DeployData {
+                addr: signer::address_of(address_signer),
+                age: 20,
+                name: string::utf8(b"Vo Le Hong")
+            }
+        )
+    }
+    
+    #[view]
+    public fun get_deploy_info(addr: address): DeployData acquires DeployData {
+        *borrow_global<DeployData>(addr)
+    }
+
+    #[view]
     public fun get_message(addr: address): string::String acquires MessageHolder {
         assert!(exists<MessageHolder>(addr), error::not_found(ENO_MESSAGE));
         *&borrow_global<MessageHolder>(addr).message
@@ -35,5 +60,10 @@ module hello_contract::message {
             event::emit_event(&mut old_message_holder.message_change_events, MessageChangeEvent {from_message: old_message, to_message: message});
             old_message_holder.message = message
         }
+    }
+
+    #[test_only]
+    public fun test_only_init_module(account: &signer) {
+        init_module(account);
     }
 }

@@ -1,0 +1,16 @@
+[package]
+name = "helloContract"
+version = "1.0.0"
+authors = []
+
+[addresses]
+HelloContract="0x8549fd85ef6509f212b306ae3d265049f6ddb2ac8b016e02b8c1882615f38a5a"
+
+[dev-addresses]
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-framework"
+
+[dev-dependencies]

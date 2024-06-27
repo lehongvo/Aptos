@@ -7,15 +7,15 @@ const {
     NetworkToNetworkName,
     Ed25519PrivateKey
 } = require("@aptos-labs/ts-sdk");
-
+const { execSync } = require("child_process");
 const dotenv = require('dotenv');
 dotenv.config();
-
+const path = require('path');
 
 const compilePackage = async (
     packageDir,
     outputFile,
-    nameAddress
+    namedAddresses
 ) => {
     try {
         console.log("In order to run compilation, you must have the `aptos` CLI installed.");
@@ -25,6 +25,11 @@ const compilePackage = async (
         } catch (e) {
             console.log("aptos is not installed. Please install it from the instructions on aptos.dev");
         }
+
+        const addressArg = namedAddresses.map(({ name, address }) => `${name}=${address}`).join(" ");
+        const compileCommand = `aptos move build-publish-payload --json-output-file ${outputFile} --package-dir ${packageDir} --named-addresses ${addressArg} --assume-yes`;
+        // aptos move build-publish-payload --json-output-file ${outputFile} 
+        execSync(compileCommand);
     } catch (error) {
         console.log(error);
     }
@@ -38,12 +43,10 @@ const deployHelloCanadoToken = async () => {
             address: AccountAddress.from(process.env.PUBLIC_KEY_DEPLOY)
         });
 
-        console.log("\n=== Addresses ===");
-        console.log(`Alice: ${account.accountAddress.toString()}`);
-
-        // Please ensure you have the aptos CLI installed
-        console.log("\n=== Compiling Hello_Canado package locally ===");
-        compilePackage("./packages/hello_canado", "hello_canado.mv", "hello_canado");
+        const path = require('path');
+        const packageDir = path.resolve(__dirname, 'build-data');
+        const outputFile = path.resolve(__dirname, 'build-data', 'hello_contract.json');
+        compilePackage(packageDir, outputFile, [{ name: "hello_contract", address: account.accountAddress }]);
     } catch (error) {
         console.log(error);
     }

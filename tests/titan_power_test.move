@@ -4,8 +4,6 @@ module coin_address::hello_canado_test {
     use aptos_framework::coin;
     use std::vector;
     use std::signer;
-    use std::debug::print;
-    use std::string::utf8;
     use std::string;
 
     use coin_address::hello_canado::{Self, UserCoin};
@@ -138,7 +136,6 @@ module coin_address::hello_canado_test {
         );
         hello_canado::approve(&user1, address2, AMOUNY_TO_APPROVE);
         let amountApptoveOfUserAfter = hello_canado::get_allowance(address1, address2);
-        print(&amountApptoveOfUserAfter);
         assert!(
             amountApptoveOfUserAfter == AMOUNY_TO_APPROVE,
             WRONF_AMOUNT_APPROVE

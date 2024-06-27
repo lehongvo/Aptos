@@ -67,6 +67,8 @@ This guide provides step-by-step instructions for deploying a smart contract on 
 1. Deploy the Contract: Use the Aptos CLI to deploy the compiled contract to the network.
 
    ```sh
+   Ex: aptos move compile --named-addresses hello_contract=default
+
    aptos move publish --package-dir <path_to_your_package> --named-addresses MyModule=default
    ```
 

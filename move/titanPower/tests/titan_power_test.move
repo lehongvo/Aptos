@@ -1,12 +1,12 @@
 #[test_only]
-module TitanPower::titan_power_test {
+module TitanPower::titan_power_v1_test {
     use aptos_framework::account;
     use aptos_framework::coin;
     use std::vector;
     use std::signer;
     use std::string;
 
-    use TitanPower::titan_power::{Self, UserCoin};
+    use TitanPower::titan_power_v1::{Self, UserCoin};
 
     const AMOUNT_TO_MINT: u64 = 2_000_000_000;
     const AMOUNT_TO_BURN: u64 = 1_000_000_000;
@@ -34,7 +34,7 @@ module TitanPower::titan_power_test {
 
         let initial_whitelist = vector<address>[address1, address2, @TitanPower];
 
-        titan_power::initialize(
+        titan_power_v1::initialize(
             &coin_admin,
             string::utf8(NAME_TOKEN),
             string::utf8(SYMBOL_TOKEN),
@@ -46,18 +46,18 @@ module TitanPower::titan_power_test {
         coin::register<UserCoin>(&user1);
         coin::register<UserCoin>(&user2);
 
-        let is_account_registered1 = titan_power::is_account_registered(address1);
+        let is_account_registered1 = titan_power_v1::is_account_registered(address1);
         assert!(
             is_account_registered1,
             WRONG_REGISTER
         );
-        let is_account_registered2 = titan_power::is_account_registered(address2);
+        let is_account_registered2 = titan_power_v1::is_account_registered(address2);
         assert!(
             is_account_registered2,
             WRONG_REGISTER
         );
 
-        let get_all_whitelist = titan_power::get_all_whitelist();
+        let get_all_whitelist = titan_power_v1::get_all_whitelist();
         assert!(
             vector::length(&get_all_whitelist) == 3,
             WRONG_WHITELIST
@@ -66,27 +66,27 @@ module TitanPower::titan_power_test {
         let address3 = @0x03;
         let user3 = account::create_account_for_test(address3);
         let user3_public = signer::address_of(&user3);
-        titan_power::update_whitelist(&coin_admin, user3_public, true);
+        titan_power_v1::update_whitelist(&coin_admin, user3_public, true);
 
-        let get_all_whitelistAfter = titan_power::get_all_whitelist();
+        let get_all_whitelistAfter = titan_power_v1::get_all_whitelist();
         assert!(
             vector::length(&get_all_whitelistAfter) == 4,
             WRONG_WHITELIST
         );
-        let is_in_whitelist = titan_power::is_in_whitelist(user3_public);
+        let is_in_whitelist = titan_power_v1::is_in_whitelist(user3_public);
         assert!(is_in_whitelist, WRONG_WHITELIST);
 
-        titan_power::update_whitelist(&coin_admin, user3_public, false);
-        let get_all_whitelistAfterDelete = titan_power::get_all_whitelist();
+        titan_power_v1::update_whitelist(&coin_admin, user3_public, false);
+        let get_all_whitelistAfterDelete = titan_power_v1::get_all_whitelist();
         assert!(
             vector::length(&get_all_whitelistAfterDelete) == 3,
             WRONG_WHITELIST
         );
-        let is_in_whitelist = titan_power::is_in_whitelist(user3_public);
+        let is_in_whitelist = titan_power_v1::is_in_whitelist(user3_public);
         assert!(!is_in_whitelist, WRONG_WHITELIST);
 
         // check mint token
-        titan_power::mint(
+        titan_power_v1::mint(
             &coin_admin,
             address1,
             AMOUNT_TO_MINT
@@ -98,7 +98,7 @@ module TitanPower::titan_power_test {
         );
 
         // check burn token
-        titan_power::burn(&user1, AMOUNT_TO_BURN);
+        titan_power_v1::burn(&user1, AMOUNT_TO_BURN);
         let balanceOfUser1Before = coin::balance<UserCoin>(address1);
         assert!(
             balanceOfUser1Before == AMOUNT_TO_BURN,
@@ -125,13 +125,13 @@ module TitanPower::titan_power_test {
         );
 
         // check approve
-        let amountApptoveOfUserBefore = titan_power::get_allowance(address1, address2);
+        let amountApptoveOfUserBefore = titan_power_v1::get_allowance(address1, address2);
         assert!(
             amountApptoveOfUserBefore == ZERO_AMOUNT,
             WRONF_AMOUNT_APPROVE
         );
-        titan_power::approve(&user1, address2, AMOUNY_TO_APPROVE);
-        let amountApptoveOfUserAfter = titan_power::get_allowance(address1, address2);
+        titan_power_v1::approve(&user1, address2, AMOUNY_TO_APPROVE);
+        let amountApptoveOfUserAfter = titan_power_v1::get_allowance(address1, address2);
         assert!(
             amountApptoveOfUserAfter == AMOUNY_TO_APPROVE,
             WRONF_AMOUNT_APPROVE

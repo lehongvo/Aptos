@@ -1,4 +1,4 @@
-module TitanPower::titan_power {
+module TitanPower::titan_power_v1 {
     use std::signer;
     use std::vector;
     use aptos_framework::coin::{
